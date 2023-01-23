@@ -2,9 +2,6 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 
 
-
-
-
 class User(AbstractUser):
     id = models.AutoField(primary_key=True)
 
@@ -26,7 +23,7 @@ class Photo(models.Model):
 
 class Auction(models.Model):
     id = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=64)
+    title = models.CharField(max_length=64)
     current_bid = models.IntegerField()
     creation_date = models.DateTimeField()
     available = models.BooleanField()
