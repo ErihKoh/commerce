@@ -1,7 +1,13 @@
 from django.contrib import admin
 
-from .models import User
+from .models import User, Auction, Category, Comment, Bid, Photo, WatchList
 
 # Register your models here.
 
 admin.site.register(User)
+admin.site.register(Auction)
+admin.site.register(Category)
+admin.site.register(Comment)
+admin.site.register(Bid)
+admin.site.register(Photo)
+admin.site.register(WatchList)
