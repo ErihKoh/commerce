@@ -6,12 +6,15 @@ from django.urls import reverse
 import os
 
 
-from .models import User
+from .models import User, Auction, Bid, Comment, Category
 
 
 
 def index(request):
-    return render(request, "auctions/index.html")
+    auctions_list = Auction.objects.all()
+    return render(request, "auctions/index.html", {
+        'auctions': auctions_list,
+    })
 
 
 def login_view(request):
