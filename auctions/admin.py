@@ -1,13 +1,13 @@
 from django.contrib import admin
+from django.contrib.auth.admin import UserAdmin
 
-from .models import User, Auction, Category, Comment, Bid, Photo, WatchList
+
+from .models import User, Auction, Comment, Bid, Category
 
 # Register your models here.
 
-admin.site.register(User)
+admin.site.register(User, UserAdmin)
 admin.site.register(Auction)
 admin.site.register(Category)
 admin.site.register(Comment)
 admin.site.register(Bid)
-admin.site.register(Photo)
-admin.site.register(WatchList)

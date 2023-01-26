@@ -52,10 +52,10 @@ def register(request):
                 "message": "Passwords must match."
             })
 
-        # Attempt to create new user
+        
         try:
             user = User.objects.create_user(username, email, password)
-            user.save()
+ 
         except IntegrityError:
             return render(request, "auctions/register.html", {
                 "message": "Username already taken."
