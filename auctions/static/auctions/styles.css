@@ -4,22 +4,44 @@ body {
 
 li {
   list-style: none;
-  margin: 0;
-  padding-left: 0;
 }
 
-p {
-  margin: 0;
+ul {
+  padding-left: 0;
 }
 
 img {
   display: block;
   max-width: 100%;
-  border-top: 5px;
+  overflow: hidden;
+}
+
+.container {
+  max-width: 1200px;
+  box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.2),
+    0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 2px 1px -1px rgba(0, 0, 0, 0.12);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header-right {
+  display: flex;
+  justify-content: space-around;
+  width: 30%;
+}
+
+.header-auth {
+  display: flex;
+  flex-wrap: nowrap;
 }
 
 .cards_list {
   display: flex;
+  justify-content: center;
   flex-wrap: wrap;
   margin: -10px;
 }

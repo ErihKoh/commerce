@@ -14,12 +14,30 @@
   </head>
   <body>
     <div class="container">
-      <h1>Auctions</h1>
-      <div>
-        {% if user.is_authenticated %} Signed in as
-        <strong>{{ user.username }}</strong>. {% else %} Not signed in.
-        {%endif%}
+      <div class="header">
+        <h1>Auctions</h1>
+        <div class="header-right">
+          <div>
+            {% if user.is_authenticated %} Signed in as
+            <strong>{{ user.username }}</strong>. {% else %} Not signed in.
+            {%endif%}
+          </div>
+
+          {% if user.is_authenticated %}
+          <div class="nav-item">
+            <a class="nav-link" href="{% url 'logout' %}">Log Out</a>
+          </div>
+          {% else %}
+          <div class="nav-item">
+            <a class="nav-link" href="{% url 'login' %}">Log In</a>
+          </div>
+          <div class="nav-item">
+            <a class="nav-link" href="{% url 'register' %}">Register</a>
+          </div>
+          {% endif %}
+        </div>
       </div>
+
       <ul class="nav">
         <li class="nav-item">
           <a class="nav-link" href="{% url 'index' %}">Active List</a>
@@ -27,18 +45,6 @@
         <li class="nav-item">
           <a class="nav-link" href="">Wish List</a>
         </li>
-        {% if user.is_authenticated %}
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'logout' %}">Log Out</a>
-        </li>
-        {% else %}
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'login' %}">Log In</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'register' %}">Register</a>
-        </li>
-        {% endif %}
       </ul>
       <hr />
       {% block body %} {% endblock %}
