@@ -37,6 +37,11 @@
             {%endif%}
             <ul>
               {% if user.is_authenticated %}
+              <li class="nav-item btn-light">
+                <a class="nav-link text-dark" href="{% url 'add' %}"
+                  >Add new auction</a
+                >
+              </li>
               <li class="nav-item">
                 <a class="nav-link text-dark" href="{% url 'logout' %}"
                   >Log Out</a

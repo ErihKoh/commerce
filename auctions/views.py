@@ -3,7 +3,7 @@ from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
-import os
+from . import forms
 
 
 from .models import User, Auction, Bid, Comment, Category
@@ -15,6 +15,12 @@ def index(request):
     return render(request, "auctions/index.html", {
         'auctions': auctions_list,
     })
+
+def add(request):
+    form = forms.NewAuction()
+    return render(request, "auctions/add.html", {
+        'form': form
+    })    
 
 
 def login_view(request):
