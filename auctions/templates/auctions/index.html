@@ -1,15 +1,23 @@
 {% extends "auctions/layout.html" %} {% block body %}
-<h2>Active Listings</h2>
-<ul class="cards_list">
+<h2 class="text-center my-2">Active Listings</h2>
+<ul class="row">
   {% for auction in auctions %}
-  <li class="card">
-    <img src="{{auction.image_url}}" alt="img of product" height="250" />
-    <div class="card_content">
-      <h3>{{auction.title}}</h3>
-      <p>{{auction.description}}</p>
-      <p>{{auction.current_price}}</p>
-      <p>{{auction.publication_date}}</p>
-      <p>{{auction.author}}</p>
+
+  <li class="col-md-3 card-group">
+    <div class="card mb-4 shadow-sm">
+      <img
+        src="{{auction.image_url}}"
+        alt="img of product"
+        height="250"
+        class="card-img-top"
+      />
+      <div class="card-body">
+        <h5 class="card-title">{{auction.title}}</h5>
+        <p class="card-text">{{auction.description}}</p>
+        <p>{{auction.current_price}}</p>
+        <p>{{auction.publication_date}}</p>
+        <p>{{auction.author}}</p>
+      </div>
     </div>
   </li>
   {% endfor %}
