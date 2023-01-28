@@ -3,12 +3,10 @@ from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
-from . import forms
-
 
 from .models import User, Auction, Bid, Comment, Category
 
-
+categories = ['digital', 'fashion', 'home', 'kids']
 
 def index(request):
     auctions_list = Auction.objects.all()
@@ -17,9 +15,8 @@ def index(request):
     })
 
 def add(request):
-    form = forms.NewAuction()
     return render(request, "auctions/add.html", {
-        'form': form
+        'categories': categories
     })    
 
 
