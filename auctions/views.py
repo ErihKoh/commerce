@@ -15,6 +15,7 @@ def index(request):
     })
 
 def add(request):
+    if request.method == 'POST':
     return render(request, "auctions/add.html", {
         'categories': categories
     })    
