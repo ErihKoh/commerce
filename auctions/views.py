@@ -4,7 +4,25 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
+# Set your Cloudinary credentials
+# ==============================
+from dotenv import load_dotenv
+load_dotenv()
+
+# Import the Cloudinary libraries
+# ==============================
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
+
+# Import to format the JSON responses
+# ==============================
+import json
+
+
 from .models import User, Auction, Bid, Comment, Category
+
+config = cloudinary.config(secure=True)
 
 categories = ['digital', 'fashion', 'home', 'kids']
 
@@ -15,8 +33,11 @@ def index(request):
     })
 
 def add(request):
-    if request.method == 'POST':
-        return render(request, "auctions/add.html", {
+    if request.method == 'POST' and request.FILES['upload']:
+        upload = request.FILES['upload']
+
+        res =  cloudinary.uploader.upload(upload, folder = "commerce/")
+    return render(request, "auctions/add.html", {
         'categories': categories
     })    
 
