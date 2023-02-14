@@ -33,10 +33,18 @@ def index(request):
     })
 
 def add(request):
-    if request.method == 'POST' and request.FILES['upload']:
+    if request.method == 'POST':
+        title = request.POST['title']
+        desc = request.POST['desc']
+        price = request.POST['price']
+        category = request.POST['category']
         upload = request.FILES['upload']
-
-        res =  cloudinary.uploader.upload(upload, folder = "commerce/")
+        img_url =  cloudinary.uploader.upload(upload, folder = "commerce/")
+        print(title)
+        print(desc)
+        print(price)
+        print(category)
+        print(img_url['url'])
     return render(request, "auctions/add.html", {
         'categories': categories
     })    
