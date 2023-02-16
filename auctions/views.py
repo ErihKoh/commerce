@@ -20,7 +20,7 @@ import cloudinary.api
 import json
 
 
-from .models import User, Auction, Bid, Comment, Category
+from .models import User, Auction, Bid, Comment
 
 config = cloudinary.config(secure=True)
 
@@ -33,18 +33,18 @@ def index(request):
     })
 
 def add(request):
+    auction = Auction.objects.all()
     if request.method == 'POST':
         title = request.POST['title']
-        desc = request.POST['desc']
+        description = request.POST['desc']
         price = request.POST['price']
         category = request.POST['category']
         upload = request.FILES['upload']
         img_url =  cloudinary.uploader.upload(upload, folder = "commerce/")
-        print(title)
-        print(desc)
-        print(price)
-        print(category)
-        print(img_url['url'])
+        
+        auction = Auction(author = User.objects.get(pk=request.user.id), title=title, category=category, description=description, current_price=price, image_url=img_url['url'])
+        auction.save()
+        
     return render(request, "auctions/add.html", {
         'categories': categories
     })    

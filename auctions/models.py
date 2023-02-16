@@ -4,12 +4,7 @@ from django.db import models
 class User(AbstractUser):
     id = models.AutoField(primary_key=True)
 
-class Category(models.Model):
-    id = models.AutoField(primary_key=True)
-    category = models.CharField(max_length=64)   
-
-    def __str__(self):
-        return self.category  
+    
 
 class Auction(models.Model):
     id = models.AutoField(primary_key=True)
@@ -17,10 +12,12 @@ class Auction(models.Model):
     title = models.CharField(max_length=64, blank=False)
     description = models.TextField(blank=True)
     current_price = models.DecimalField(max_digits=11, decimal_places=2, default=0.0)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    category = models.CharField(max_length=64) 
     image_url = models.URLField(blank=True)
     publication_date = models.DateTimeField(auto_now_add=True)
-    isAvailable = models.BooleanField(default=False)
+    isAvailable = models.BooleanField(default=True)
+
+    
 
     def __str__(self):
         return f"Auction id: {self.id}, title: {self.title}, seller: {self.author}"
