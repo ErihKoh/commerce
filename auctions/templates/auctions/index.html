@@ -21,13 +21,13 @@
       <strong>{{ user.username }}</strong>. {% else %} Not signed in. {%endif%}
       <ul>
         {% if user.is_authenticated %}
-        <li class="nav-item btn-light">
-          <a class="nav-link text-dark" href="{% url 'add' %}"
+        <li class="nav-item">
+          <a class="nav-link text-blue" href="{% url 'add' %}"
             >Add new auction</a
           >
         </li>
         <li class="nav-item">
-          <a class="nav-link text-dark" href="{% url 'logout' %}">Log Out</a>
+          <a class="nav-link text-blue" href="{% url 'logout' %}">Log Out</a>
         </li>
         {% else %}
         <li class="nav-item d-flex flex-row">
@@ -41,14 +41,13 @@
 </nav>
 <h2 class="text-center my-2">Active Listings</h2>
 <ul class="row">
-  {% for auction in auctions %}
-
+  {% for auction in auctions %} {% if auction.isAvailable %}
   <li class="col-md-3 card-group">
     <div class="card mb-4 shadow-sm">
       <img
         src="{{auction.image_url}}"
         alt="img of product"
-        height="250"
+        height="350"
         class="card-img-top"
       />
       <div class="card-body">
@@ -60,6 +59,6 @@
       </div>
     </div>
   </li>
-  {% endfor %}
+  {% endif %} {% endfor %}
 </ul>
 {% endblock %}
