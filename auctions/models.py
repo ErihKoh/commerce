@@ -1,45 +1,49 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
+
 class User(AbstractUser):
     id = models.AutoField(primary_key=True)
 
-    
 
 class Auction(models.Model):
     id = models.AutoField(primary_key=True)
-    author = models.ForeignKey(User, on_delete=models.CASCADE)
-    title = models.CharField(max_length=64, blank=False)
-    description = models.TextField(blank=True)
-    current_price = models.DecimalField(max_digits=11, decimal_places=2, default=0.0)
-    category = models.CharField(max_length=64) 
+    name = models.CharField(max_length=100)
+    description = models.TextField()
+    start_price = models.DecimalField(max_digits=10, decimal_places=2)
+    current_price = models.DecimalField(max_digits=10, decimal_places=2)
+    end_date = models.DateTimeField()
+    seller = models.ForeignKey(User, on_delete=models.CASCADE, related_name='auctions')
+    winner = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='won_auctions')
+    created_at = models.DateTimeField(auto_now_add=True)
+    is_available = models.BooleanField(default=True)
     image_url = models.URLField(blank=True)
-    publication_date = models.DateTimeField(auto_now_add=True)
-    isAvailable = models.BooleanField(default=True)
-
-    
+    category = models.CharField(max_length=64)
 
     def __str__(self):
-        return f"Auction id: {self.id}, title: {self.title}, seller: {self.author}"
+        return self.name
+
+    def get_comments(self):
+        return self.comments.order_by('-created_at')
+
 
 class Bid(models.Model):
     id = models.AutoField(primary_key=True)
-    auction = models.ForeignKey(Auction, on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    bid_date = models.DateTimeField(auto_now_add=True)
-    bid_price = models.DecimalField(max_digits=11, decimal_places=2)
+    auction = models.ForeignKey(Auction, on_delete=models.CASCADE, related_name='bids')
+    bidder = models.ForeignKey(User, on_delete=models.CASCADE, related_name='bids')
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.user} bid {self.bid_price} $ on {self.auction}"
+        return f"{self.bidder.user} - {self.auction.name}: {self.amount}"
+
 
 class Comment(models.Model):
     id = models.AutoField(primary_key=True)
-    auction = models.ForeignKey(Auction, on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    comment = models.TextField(blank=False)
-    comment_date = models.DateTimeField(auto_now_add=True, null=True)
+    auction = models.ForeignKey(Auction, on_delete=models.CASCADE, related_name='comments')
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    text = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"Comment {self.id} on auction {self.auction} made by {self.user}"
-
-  
+        return self.text

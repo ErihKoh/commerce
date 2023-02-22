@@ -2,61 +2,7 @@
 <div>
   <a class="nav-link" href="{% url 'index' %}"> <-- go to actions list </a>
   <form actions="{% url 'add' %}" method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    <div class="form-group">
-      <label for="title">Title</label>
-      <input
-        type="text"
-        class="form-control"
-        id="title"
-        placeholder="Title"
-        name="title"
-      />
-    </div>
-    <div class="form-group">
-      <label for="desc">Description</label>
-      <input
-        type="text"
-        class="form-control"
-        id="desc"
-        placeholder="Description"
-        name="desc"
-      />
-    </div>
-    <div class="form-group">
-      <label for="price">Price</label>
-      <input
-        type="text"
-        class="form-control"
-        id="price"
-        placeholder="Price"
-        name="price"
-      />
-    </div>
-    <div class="form-group">
-      <label for="img-url">Add image</label>
-      <input
-        name="upload"
-        accept="image/*"
-        type="file"
-        class="form-control"
-        id="img-url"
-        placeholder="Image URL"
-      />
-    </div>
-    <div class="form-group">
-      <label for="exampleFormControlSelect1">Select category</label>
-      <select
-        class="form-control"
-        id="exampleFormControlSelect1"
-        name="category"
-      >
-        <option value="" selected disabled hidden>No category</option>
-        {% for category in categories %}
-        <option value="{{ category }}">{{ category }}</option>
-        {% endfor %}
-      </select>
-    </div>
+    {% csrf_token %} {{ form.as_p }}
     <button type="submit" class="btn btn-primary">Submit</button>
   </form>
 </div>

@@ -7,6 +7,8 @@ from django.urls import reverse
 # Set your Cloudinary credentials
 # ==============================
 from dotenv import load_dotenv
+
+from auctions.form import AuctionForm
 load_dotenv()
 
 # Import the Cloudinary libraries
@@ -24,8 +26,6 @@ from .models import User, Auction, Bid, Comment
 
 config = cloudinary.config(secure=True)
 
-categories = ['digital', 'fashion', 'home', 'kids']
-
 def index(request):
     auctions_list = Auction.objects.all()
     return render(request, "auctions/index.html", {
@@ -33,20 +33,15 @@ def index(request):
     })
 
 def add(request):
-    auction = Auction.objects.all()
+    form = AuctionForm()
     if request.method == 'POST':
-        title = request.POST['title']
-        description = request.POST['desc']
-        price = request.POST['price']
-        category = request.POST['category']
-        upload = request.FILES['upload']
-        img_url =  cloudinary.uploader.upload(upload, folder = "commerce/")
-        
-        auction = Auction(author = User.objects.get(pk=request.user.id), title=title, category=category, description=description, current_price=price, image_url=img_url['url'])
-        auction.save()
+        form = AuctionForm(request.POST)
+        if form.is_valid():
+            auction = form.save(commit=False)
+            auction.seller = request.user
         
     return render(request, "auctions/add.html", {
-        'categories': categories
+        'form': form
     })    
 
 
@@ -100,3 +95,15 @@ def register(request):
         return HttpResponseRedirect(reverse("index"))
     else:
         return render(request, "auctions/register.html")
+
+
+
+# @login_required
+# def add_comment(request, auction_id):
+#     auction = get_object_or_404(Auction, pk=auction_id)
+#     if request.method == 'POST':
+#         text = request.POST.get('text')
+#         if text:
+#             comment = Comment.objects.create(auction=auction, author=request.user, text=text)
+#             comment.save()
+#     return redirect('auction_detail', auction_id=auction.id)
