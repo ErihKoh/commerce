@@ -13,7 +13,7 @@ class AuctionForm(forms.ModelForm):
 
     class Meta:
         model = Auction
-        fields = ['name', 'description', 'image_url', 'start_price', 'end_date', 'category']
+        fields = ['name', 'description', 'image_url', 'price', 'end_date', 'category']
         widgets = {
             'end_date': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
             'category': forms.Select(choices=CATEGORIES,  attrs={'class': 'form-control'}),

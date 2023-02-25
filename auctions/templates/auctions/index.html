@@ -8,9 +8,7 @@
   <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
     <ul class="navbar-nav mr-auto mt-2 mt-lg-0 nav nav-tabs">
       <li class="nav-item">
-        <a class="nav-link text-dark active" href="{% url 'index' %}"
-          >Active List</a
-        >
+        <a class="nav-link text-dark" href="{% url 'index' %}">Active List</a>
       </li>
       <li class="nav-item">
         <a class="nav-link text-dark" href="">Wish List</a>
@@ -41,7 +39,8 @@
 </nav>
 <h2 class="text-center my-2">Active Listings</h2>
 <ul class="row">
-  {% for auction in auctions %} {% if auction.isAvailable %}
+  {% for auction in auctions %} {% if auction.is_available %}
+
   <li class="col-md-3 card-group">
     <div class="card mb-4 shadow-sm">
       <img
@@ -51,14 +50,16 @@
         class="card-img-top"
       />
       <div class="card-body">
-        <h5 class="card-title">{{auction.title}}</h5>
+        <h5 class="card-title">{{auction.name}}</h5>
         <p class="card-text">{{auction.description}}</p>
-        <p>{{auction.current_price}}</p>
+        <p>{{auction.price}}</p>
         <p>{{auction.publication_date}}</p>
-        <p>{{auction.author}}</p>
+        <p>{{auction.seller}}</p>
       </div>
     </div>
   </li>
-  {% endif %} {% endfor %}
+  {% endif %} {% empty %}
+  <li class="ml-4">The auctions list is empty.</li>
+  {% endfor %}
 </ul>
 {% endblock %}
