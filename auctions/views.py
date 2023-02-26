@@ -1,7 +1,7 @@
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 
 # Set your Cloudinary credentials
@@ -29,7 +29,6 @@ config = cloudinary.config(secure=True)
 
 def index(request):
     auctions_list = Auction.objects.all()
-    
     return render(request, "auctions/index.html", {
         'auctions': auctions_list,
     })
@@ -51,6 +50,10 @@ def add(request):
     return render(request, "auctions/add.html", {
         'form': form
     })
+
+def detail(request, auction_id):
+    auction = get_object_or_404(Auction, pk=auction_id)
+    return render(request, "auctions/detail.html", {'auction': auction})
 
 
 def login_view(request):

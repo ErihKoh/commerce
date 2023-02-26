@@ -20,7 +20,7 @@ class Auction(models.Model):
     is_available = models.BooleanField(default=True)
 
     def __str__(self):
-        return self.name
+        return f"{self.name}, id: {self.id}"
 
     def get_comments(self):
         return self.comments.order_by('-created_at')

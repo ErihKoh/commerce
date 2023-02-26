@@ -42,21 +42,23 @@
   {% for auction in auctions %} {% if auction.is_available %}
 
   <li class="col-md-3 card-group">
-    <div class="card mb-4 shadow-sm">
-      <img
-        src="{{auction.image_url}}"
-        alt="img of product"
-        height="350"
-        class="card-img-top"
-      />
-      <div class="card-body">
-        <h5 class="card-title">{{auction.name}}</h5>
-        <p class="card-text">{{auction.description}}</p>
-        <p>{{auction.price}}</p>
-        <p>{{auction.publication_date}}</p>
-        <p>{{auction.seller}}</p>
-      </div>
-    </div>
+    <a href="{% url 'detail' auction.id %}"
+      ><div class="card mb-4 shadow-sm card-custom">
+        <img
+          src="{{auction.image_url}}"
+          alt="img of product"
+          height="300"
+          class="card-img-top"
+        />
+        <div class="card-body">
+          <h5 class="card-title">{{auction.name}}</h5>
+          <p class="card-text text-black">{{auction.description}}</p>
+          <p>{{auction.price}}</p>
+          <p>{{auction.publication_date}}</p>
+          <p>{{auction.seller}}</p>
+        </div>
+      </div></a
+    >
   </li>
   {% endif %} {% empty %}
   <li class="ml-4">The auctions list is empty.</li>
