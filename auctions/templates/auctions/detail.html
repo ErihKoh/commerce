@@ -1,6 +1,26 @@
 {% extends "auctions/layout.html" %} {% block body %}
+<a class="nav-link" href="{% url 'index' %}"> <-- go to actions list </a>
+    <div class="img-container">
+        <img src="{{auction.image_url}}" alt="img of product" />
+      </div>
+  <div class="card-body">
+    <h2 class="card-title">{{auction.name}}</h2>
+    <p class="card-text text-black">
+        <b>Description:</b> <p>{{auction.description}}</p>
+      </p>
+      <p><b>Price:</b> {{auction.price}}</p>
+      <p><b>Publication date:</b> {{auction.created_at}}</p>
+      <p><b>End date:</b> {{auction.end_date}}</p>
+      <p><b>Seller:</b> {{auction.seller}}</p>
+  </div>
 
-<p>{{ auction.name }}</p>
-<p>{{ auction.id }}</p>
+{% if user == seller %}
 
-{% endblock %}
+<a href="">Edit auction</a>
+
+<form action="{% url 'delete' auction.id %}" method="POST">
+    {% csrf_token %}
+    <input class="btn btn-default btn-danger" type="submit" value="Delete"/>
+  </form>
+
+{% endif %} {% endblock %}

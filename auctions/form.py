@@ -10,7 +10,7 @@ CATEGORIES = (
 
 
 class AuctionForm(forms.ModelForm):
-
+    price = forms.DecimalField(initial=0.00)
     class Meta:
         model = Auction
         fields = ['name', 'description', 'image_url', 'price', 'end_date', 'category']
@@ -19,4 +19,17 @@ class AuctionForm(forms.ModelForm):
             'category': forms.Select(choices=CATEGORIES,  attrs={'class': 'form-control'}),
             'image_url': forms.ClearableFileInput(attrs={'multiple': True}),
         }
-        initial = {'category': 'no-category'}
+        initial = {'category': 'no-category', }
+
+
+
+# class EditAuctionForm(forms.ModelForm):
+#     is_available = forms.BooleanField(widget=forms.CheckboxInput(), required=False)
+
+#     class Meta:
+#         model = Auction
+#         fields = ['name', 'description', 'start_price', 'is_available' 'categories']
+#         widgets = {
+#             'end_date': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
+#             'categories': forms.ModelChoiceField(queryset=CATEGORIES, widget=forms.Select)
+#         }        

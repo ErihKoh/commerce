@@ -22,7 +22,7 @@ import cloudinary.api
 # ==============================
 import json
 
-from .models import User, Auction, Bid, Comment
+from .models import User, Auction, Bid, Comment, Watchlist
 
 config = cloudinary.config(secure=True)
 
@@ -32,6 +32,28 @@ def index(request):
     return render(request, "auctions/index.html", {
         'auctions': auctions_list,
     })
+
+
+def my_list(request):
+    auctions_list = Auction.objects.all()
+    return render(request, "auctions/my-list.html", {
+        'auctions': auctions_list,
+    })
+
+def watching_list(request):
+    auctions_list = Watchlist.objects.all()
+    return render(request, "auctions/watch-list.html", {
+        'auctions': auctions_list,
+    })
+
+# def add_to_watchlist(request, auction_id):
+#     auction = Auction.objects.get(pk=auction_id)
+#     request.user.watchlist.auctions.add(auction)
+
+#     auctions_list = Watchlist.objects.all()
+#     return render(request, "auctions/watch-list.html", {
+#         'auctions': auctions_list,
+#     })
 
 
 def add(request):
@@ -51,9 +73,25 @@ def add(request):
         'form': form
     })
 
+def edit(request):
+    pass
+
+
+def delete(request, auction_id):
+    auction = get_object_or_404(Auction, pk=auction_id)
+
+    auction.delete()
+
+    print(f'{auction.name} has been deleted')
+
+    return redirect("/")
+
+
 def detail(request, auction_id):
     auction = get_object_or_404(Auction, pk=auction_id)
-    return render(request, "auctions/detail.html", {'auction': auction})
+    seller  = auction.seller
+    user = request.user
+    return render(request, "auctions/detail.html", {'auction': auction, 'user': user, 'seller': seller})
 
 
 def login_view(request):
