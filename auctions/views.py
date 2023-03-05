@@ -8,7 +8,7 @@ from django.urls import reverse
 # ==============================
 from dotenv import load_dotenv
 
-from auctions.form import AuctionForm
+from auctions.form import AuctionForm, EditAuctionForm
 
 load_dotenv()
 
@@ -36,8 +36,11 @@ def index(request):
 
 def my_list(request):
     auctions_list = Auction.objects.all()
+    
+    user = request.user
     return render(request, "auctions/my-list.html", {
         'auctions': auctions_list,
+        'user': user,
     })
 
 def watching_list(request):
@@ -73,8 +76,17 @@ def add(request):
         'form': form
     })
 
-def edit(request):
-    pass
+def edit(request, auction_id):
+    auction = Auction.objects.get(id=auction_id)
+    if request.method == 'POST':
+        form = EditAuctionForm(request.POST, instance=auction)
+        if form.is_valid():
+            form.save()
+            return redirect('detail', auction_id=auction_id)
+    else:
+        form = EditAuctionForm(instance=auction)
+    return render(request, 'auctions/edit.html', {'form': form, 'auction_id': auction_id})
+
 
 
 def delete(request, auction_id):

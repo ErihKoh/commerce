@@ -16,11 +16,14 @@
 
 {% if user == seller %}
 
-<a href="">Edit auction</a>
+<a href="{% url 'edit' auction.id %}" class="btn btn-default btn-primary mb-2">Edit auction</a>
 
 <form action="{% url 'delete' auction.id %}" method="POST">
     {% csrf_token %}
-    <input class="btn btn-default btn-danger" type="submit" value="Delete"/>
+    <input class="btn btn-default btn-danger" type="submit" value="Delete auction"/>
   </form>
+  {% else %}
+
+  <h2>hello</h2>
 
 {% endif %} {% endblock %}

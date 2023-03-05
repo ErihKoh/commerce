@@ -27,7 +27,8 @@ class Auction(models.Model):
     
 class Watchlist(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    auctions = models.ManyToManyField(Auction)    
+    auctions = models.ManyToManyField(Auction)  
+    is_watching = models.BooleanField(default=False)  
 
 
 class Bid(models.Model):

@@ -23,13 +23,12 @@ class AuctionForm(forms.ModelForm):
 
 
 
-# class EditAuctionForm(forms.ModelForm):
-#     is_available = forms.BooleanField(widget=forms.CheckboxInput(), required=False)
+class EditAuctionForm(forms.ModelForm):
+    is_available = forms.BooleanField(widget=forms.CheckboxInput(), required=False)
 
-#     class Meta:
-#         model = Auction
-#         fields = ['name', 'description', 'start_price', 'is_available' 'categories']
-#         widgets = {
-#             'end_date': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
-#             'categories': forms.ModelChoiceField(queryset=CATEGORIES, widget=forms.Select)
-#         }        
+    class Meta:
+        model = Auction
+        fields = ['name', 'description', 'price', 'is_available']
+        widgets = {
+            'end_date': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
+        }        

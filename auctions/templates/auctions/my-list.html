@@ -3,7 +3,7 @@
 <h2 class="text-center my-2">My List</h2>
 
 <ul class="row mx-auto">
-  {% for auction in auctions %} {% if auction.is_available and user == seller %}
+  {% for auction in auctions %} {% if user == auction.seller %}
 
   <li class="col-md-3 card-group">
     <a href="{% url 'detail' auction.id %}"
