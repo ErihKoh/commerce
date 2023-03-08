@@ -24,6 +24,17 @@
   </form>
   {% else %}
 
-  <h2>hello</h2>
+  {% if user.is_authenticated %}
+    {% if not watchlist_item %}
+        <form method="post" action="{% url 'add_to_watchlist' auction.id %}">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-primary">Add to watchlist</button>
+        </form>
+    {% else %}
+        <p>This auction is already on your watchlist.</p>
+    {% endif %}
+{% else %}
+    <p><a href="{% url 'login' %}">Log in</a> to add this auction to your watchlist.</p>
+{% endif %}
 
 {% endif %} {% endblock %}

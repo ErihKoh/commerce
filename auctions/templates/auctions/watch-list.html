@@ -3,23 +3,11 @@
 <h2 class="text-center my-2">Watching List</h2>
 
 <ul class="row mx-auto">
-  {% for auction in auctions %} {% if auction.is_available and user == seller %}
+  {% for auction in auctions %} {% if True %}
 
-  <li class="col-md-3 card-group">
-    <a href="{% url 'detail' auction.id %}"
-      ><div class="card mb-4 shadow-sm card-custom">
-        <div class="img-container">
-          <img src="{{auction.image_url}}" alt="img of product" />
-        </div>
-        <div class="card-body">
-          <h5 class="card-title">{{auction.name}}</h5>
-          <p>Price: {{auction.price}}</p>
-          <p>Seller: {{auction.seller}}</p>
-        </div>
-      </div></a
-    >
-  </li>
+  <li class="col-md-3 card-group"></li>
 
+  <h2>{{auction}}</h2>
   {% endif %} {% endfor %}
 </ul>
 

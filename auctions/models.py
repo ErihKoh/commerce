@@ -26,9 +26,12 @@ class Auction(models.Model):
         return self.comments.order_by('-created_at')
     
 class Watchlist(models.Model):
+    id = models.AutoField(primary_key=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    auctions = models.ManyToManyField(Auction)  
-    is_watching = models.BooleanField(default=False)  
+    auction = models.ManyToManyField(Auction)  
+
+    def __str__(self):
+        return f"{self.id}, auction: {self.auction}"
 
 
 class Bid(models.Model):

@@ -43,20 +43,24 @@ def my_list(request):
         'user': user,
     })
 
+
 def watching_list(request):
-    auctions_list = Watchlist.objects.all()
+    watchlist = Watchlist.objects.filter(user=request.user)
+    for i in watchlist:
+        print(i.auction)
     return render(request, "auctions/watch-list.html", {
-        'auctions': auctions_list,
+        'auctions': watchlist
     })
 
-# def add_to_watchlist(request, auction_id):
-#     auction = Auction.objects.get(pk=auction_id)
-#     request.user.watchlist.auctions.add(auction)
-
-#     auctions_list = Watchlist.objects.all()
-#     return render(request, "auctions/watch-list.html", {
-#         'auctions': auctions_list,
-#     })
+def add_to_watchlist(request, auction_id):
+    auction = get_object_or_404(Auction, pk=auction_id)
+    if request.user.is_authenticated:
+        if not Watchlist.objects.filter(user=request.user, auction=auction).exists():
+            watchlist_item = Watchlist(user=request.user)
+            watchlist_item.save()
+            watchlist_item.auction.add(auction)
+            
+    return redirect('detail', auction_id)
 
 
 def add(request):
