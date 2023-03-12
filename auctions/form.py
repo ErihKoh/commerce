@@ -1,5 +1,5 @@
 from django import forms
-from .models import Auction
+from .models import Auction, Comment
 
 CATEGORIES = (
         ('no-category', 'no-category'),
@@ -31,4 +31,12 @@ class EditAuctionForm(forms.ModelForm):
         fields = ['name', 'description', 'price', 'is_available']
         widgets = {
             'end_date': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
-        }        
+        }    
+
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ('text',)
+
+    text = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 3}))         

@@ -1,6 +1,9 @@
 {% extends "auctions/layout.html" %} {% block body %}
 <a class="nav-link" href="{% url 'index' %}"> <-- go to actions list </a>
-    <div class="img-container">
+   
+<div class="d-flex flex-row">
+    <div> 
+        <div class="img-container">
         <img src="{{auction.image_url}}" alt="img of product" />
       </div>
   <div class="card-body">
@@ -13,6 +16,14 @@
       <p><b>End date:</b> {{auction.end_date}}</p>
       <p><b>Seller:</b> {{auction.seller}}</p>
   </div>
+</div>
+  <div>
+    <form method="post" action="">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-info">Add a cometary</button>
+</form>
+</div>
+</div>
 
 {% if user == seller %}
 

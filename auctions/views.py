@@ -75,6 +75,16 @@ def remove_from_watchlist(request, auction_id):
     return redirect('detail', auction_id)
 
 
+def add_comment(request, auction_id):
+    auction = get_object_or_404(Auction, pk=auction_id)
+    if request.method == 'POST':
+        text = request.POST.get('text')
+        if text:
+            comment = Comment.objects.create(auction=auction, author=request.user, text=text)
+            comment.save()
+    return redirect('auction/detail', auction_id=auction.id)
+
+
 def add(request):
     form = AuctionForm()
     if request.method == 'POST':
@@ -177,12 +187,5 @@ def register(request):
     else:
         return render(request, "auctions/register.html")
 
-# @login_required
-# def add_comment(request, auction_id):
-#     auction = get_object_or_404(Auction, pk=auction_id)
-#     if request.method == 'POST':
-#         text = request.POST.get('text')
-#         if text:
-#             comment = Comment.objects.create(auction=auction, author=request.user, text=text)
-#             comment.save()
-#     return redirect('auction_detail', auction_id=auction.id)
+
+
