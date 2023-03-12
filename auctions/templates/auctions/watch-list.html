@@ -1,9 +1,9 @@
 {% extends "auctions/layout.html" %} {% block body %}
 
 <h2 class="text-center my-2">Watching List</h2>
-{% for items in watchlist %}
+
 <ul class="row mx-auto">
-  {% for auction in items.auction.all %}
+  {% for items in watchlist %} {% for auction in items.auction.all %} {% if user == items.user %}
   <li class="col-md-3 card-group">
     <a href="{% url 'detail' auction.id %}"
       ><div class="card mb-4 shadow-sm card-custom">
@@ -18,6 +18,6 @@
       </div></a
     >
   </li>
-  {% endfor %}
+  {% endif %} {% endfor %} {% endfor %}
 </ul>
-{% endfor %} {% endblock %}
+{% endblock %}

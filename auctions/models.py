@@ -32,6 +32,9 @@ class Watchlist(models.Model):
 
     def __str__(self):
         return f"{self.id}"
+    
+    def remove_auction(self, auction):
+        self.auction.remove(auction)
 
 
 class Bid(models.Model):

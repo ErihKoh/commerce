@@ -46,9 +46,12 @@ def my_list(request):
 
 def watching_list(request):
     watching_list = Watchlist.objects.prefetch_related('auction').all()
+    user = request.user
     return render(request, "auctions/watch-list.html", {
-        'watchlist': watching_list
+        'watchlist': watching_list,
+        'user': user,
     })
+
 
 def add_to_watchlist(request, auction_id):
     auction = get_object_or_404(Auction, pk=auction_id)
@@ -58,9 +61,19 @@ def add_to_watchlist(request, auction_id):
             watchlist_item.save()
             watchlist_item.auction.add(auction)
 
+    return redirect('detail', auction_id)
 
-    watchlist = Watchlist.objects.prefetch_related('auction').all()       
-    return redirect('detail', auction_id, watchlist)
+
+def remove_from_watchlist(request, auction_id):
+    # auction = Auction.objects.filter(pk=auction_id)
+    # print(auction)
+    # auction = get_object_or_404(Auction, id=auction_id)
+    # print(auction)
+    # watchlist = Watchlist.objects.filter(user=request.user)
+    # print(watchlist)
+    # watchlist = get_object_or_404(Watchlist, user=request.user)
+
+    return redirect('/')
 
 
 def add(request):
@@ -107,7 +120,13 @@ def detail(request, auction_id):
     auction = get_object_or_404(Auction, pk=auction_id)
     seller  = auction.seller
     user = request.user
-    return render(request, "auctions/detail.html", {'auction': auction, 'user': user, 'seller': seller})
+    auctions = []
+    watchlist = Watchlist.objects.prefetch_related('auction').all()    
+    for items in watchlist:
+        for i in items.auction.all():
+            auctions.append(i.id)
+
+    return render(request, "auctions/detail.html", {'auction': auction, 'user': user, 'seller': seller ,'auctions_id': auctions})
 
 
 def login_view(request):

@@ -25,18 +25,20 @@
   {% else %}
 
   {% if user.is_authenticated %}
-    {% if not watchlist_item %}
-        <form method="post" action="{% url 'add_to_watchlist' auction.id %}">
+
+    {% if auction.id in auctions_id%}
+    <p>This auction is already on your watchlist.</p>
+        <form method="post" action="{% url 'remove_from_watchlist' auction.id %}">
             {% csrf_token %}
-            <button type="submit" class="btn btn-primary">Add to watchlist</button>
+            <button type="submit" class="btn btn-danger">Remove from watchlist</button>
         </form>
     {% else %}
-        <p>This auction is already on your watchlist.</p>
-        <form method="post" action="">
-            {% csrf_token %}
-            <button type="submit" class="btn btn-primary">Remove from watchlist</button>
-        </form>
+    <form method="post" action="{% url 'add_to_watchlist' auction.id %}">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-primary">Add to watchlist</button>
+    </form>
     {% endif %}
+    
 {% else %}
     <p><a href="{% url 'login' %}">Log in</a> to add this auction to your watchlist.</p>
 {% endif %}
