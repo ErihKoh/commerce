@@ -45,11 +45,9 @@ def my_list(request):
 
 
 def watching_list(request):
-    watchlist = Watchlist.objects.filter(user=request.user)
-    for i in watchlist:
-        print(i.auction)
+    watching_list = Watchlist.objects.prefetch_related('auction').all()
     return render(request, "auctions/watch-list.html", {
-        'auctions': watchlist
+        'watchlist': watching_list
     })
 
 def add_to_watchlist(request, auction_id):
@@ -59,8 +57,10 @@ def add_to_watchlist(request, auction_id):
             watchlist_item = Watchlist(user=request.user)
             watchlist_item.save()
             watchlist_item.auction.add(auction)
-            
-    return redirect('detail', auction_id)
+
+
+    watchlist = Watchlist.objects.prefetch_related('auction').all()       
+    return redirect('detail', auction_id, watchlist)
 
 
 def add(request):
@@ -80,8 +80,9 @@ def add(request):
         'form': form
     })
 
+
 def edit(request, auction_id):
-    auction = Auction.objects.get(id=auction_id)
+    auction = get_object_or_404(Auction, pk=auction_id)
     if request.method == 'POST':
         form = EditAuctionForm(request.POST, instance=auction)
         if form.is_valid():
@@ -90,7 +91,6 @@ def edit(request, auction_id):
     else:
         form = EditAuctionForm(instance=auction)
     return render(request, 'auctions/edit.html', {'form': form, 'auction_id': auction_id})
-
 
 
 def delete(request, auction_id):

@@ -32,6 +32,10 @@
         </form>
     {% else %}
         <p>This auction is already on your watchlist.</p>
+        <form method="post" action="">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-primary">Remove from watchlist</button>
+        </form>
     {% endif %}
 {% else %}
     <p><a href="{% url 'login' %}">Log in</a> to add this auction to your watchlist.</p>

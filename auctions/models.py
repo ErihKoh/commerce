@@ -28,10 +28,10 @@ class Auction(models.Model):
 class Watchlist(models.Model):
     id = models.AutoField(primary_key=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    auction = models.ManyToManyField(Auction)  
+    auction = models.ManyToManyField(Auction, related_name='watching_list')  
 
     def __str__(self):
-        return f"{self.id}, auction: {self.auction}"
+        return f"{self.id}"
 
 
 class Bid(models.Model):
