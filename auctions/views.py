@@ -45,10 +45,10 @@ def my_list(request):
 
 
 def watching_list(request):
-    watching_list = Watchlist.objects.prefetch_related('auction').all()
+    watchlist = Watchlist.objects.all()
     user = request.user
     return render(request, "auctions/watch-list.html", {
-        'watchlist': watching_list,
+        'watchlist': watchlist,
         'user': user,
     })
 
@@ -56,24 +56,23 @@ def watching_list(request):
 def add_to_watchlist(request, auction_id):
     auction = get_object_or_404(Auction, pk=auction_id)
     if request.user.is_authenticated:
-        if not Watchlist.objects.filter(user=request.user, auction=auction).exists():
-            watchlist_item = Watchlist(user=request.user)
-            watchlist_item.save()
-            watchlist_item.auction.add(auction)
+        watchlist = Watchlist.objects.create(user=request.user, auction=auction)
+        watchlist.save()
 
     return redirect('detail', auction_id)
 
 
 def remove_from_watchlist(request, auction_id):
-    # auction = Auction.objects.filter(pk=auction_id)
-    # print(auction)
-    # auction = get_object_or_404(Auction, id=auction_id)
-    # print(auction)
-    # watchlist = Watchlist.objects.filter(user=request.user)
-    # print(watchlist)
-    # watchlist = get_object_or_404(Watchlist, user=request.user)
+    watchlist = Watchlist.objects.all()
+    global watchlist_item 
+    for i in watchlist:
+        if i.auction.id == auction_id:
+            watchlist_item = i
 
-    return redirect('/')
+    watchlist_item.delete()
+
+    print(f'Item has been deleted from watchlist')
+    return redirect('detail', auction_id)
 
 
 def add(request):
@@ -121,12 +120,11 @@ def detail(request, auction_id):
     seller  = auction.seller
     user = request.user
     auctions = []
-    watchlist = Watchlist.objects.prefetch_related('auction').all()    
-    for items in watchlist:
-        for i in items.auction.all():
-            auctions.append(i.id)
+    watchlist = Watchlist.objects.all()    
+    for item in watchlist:
+        auctions.append(item.auction.id)
 
-    return render(request, "auctions/detail.html", {'auction': auction, 'user': user, 'seller': seller ,'auctions_id': auctions})
+    return render(request, "auctions/detail.html", {'auction': auction, 'user': user, 'seller': seller, 'auctions_id': auctions})
 
 
 def login_view(request):
