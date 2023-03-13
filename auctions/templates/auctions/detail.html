@@ -18,10 +18,27 @@
   </div>
 </div>
   <div>
-    <form method="post" action="">
+    <form method="post" action="{% url 'add_comment' auction.id %}">
     {% csrf_token %}
     <button type="submit" class="btn btn-info">Add a cometary</button>
 </form>
+
+<table class="table table-striped mt-3">
+  <thead >
+    <tr>
+    <th scope="col">Author</th>
+    <th scope="col">Comment</th>
+  </tr>
+</thead>
+<tbody>
+  {% for comment in comments %}
+  <tr>
+    <th scope="row">{{comment.author}}</th>
+    <td>{{ comment }}</td>
+  </tr>
+  {% endfor %}
+</tbody>
+</table>
 </div>
 </div>
 

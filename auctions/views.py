@@ -8,7 +8,7 @@ from django.urls import reverse
 # ==============================
 from dotenv import load_dotenv
 
-from auctions.form import AuctionForm, EditAuctionForm
+from auctions.form import AuctionForm, EditAuctionForm, CommentForm
 
 load_dotenv()
 
@@ -77,12 +77,18 @@ def remove_from_watchlist(request, auction_id):
 
 def add_comment(request, auction_id):
     auction = get_object_or_404(Auction, pk=auction_id)
+    form = CommentForm()
     if request.method == 'POST':
-        text = request.POST.get('text')
-        if text:
-            comment = Comment.objects.create(auction=auction, author=request.user, text=text)
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.auction = auction
+            comment.author = request.user
             comment.save()
-    return redirect('auction/detail', auction_id=auction.id)
+            return redirect("/")
+    return render(request, "auctions/add_comment.html", {
+        'form': form
+    })
 
 
 def add(request):
@@ -127,14 +133,16 @@ def delete(request, auction_id):
 
 def detail(request, auction_id):
     auction = get_object_or_404(Auction, pk=auction_id)
+    comments = Comment.objects.filter(author=request.user, auction=auction)
+    print(comments)
     seller  = auction.seller
     user = request.user
     auctions = []
     watchlist = Watchlist.objects.all()    
     for item in watchlist:
         auctions.append(item.auction.id)
-
-    return render(request, "auctions/detail.html", {'auction': auction, 'user': user, 'seller': seller, 'auctions_id': auctions})
+    context = {'auction': auction, 'user': user, 'seller': seller, 'auctions_id': auctions, 'comments': comments}
+    return render(request, "auctions/detail.html", context)
 
 
 def login_view(request):
