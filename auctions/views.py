@@ -3,12 +3,14 @@ from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
+from django.db.models import Max
+from decimal import Decimal
 
 # Set your Cloudinary credentials
 # ==============================
 from dotenv import load_dotenv
 
-from auctions.form import AuctionForm, EditAuctionForm, CommentForm
+from auctions.form import AuctionForm, EditAuctionForm, CommentForm, BidForm
 
 load_dotenv()
 
@@ -90,6 +92,27 @@ def add_comment(request, auction_id):
         'form': form
     })
 
+def offer_bid(request, auction_id):
+    auction = get_object_or_404(Auction, pk=auction_id)
+    
+    form = BidForm()
+    if request.method == 'POST':
+        max_bid = Bid.objects.aggregate(Max('amount'))['amount__max']
+        form = BidForm(request.POST)
+        amount = Decimal(request.POST.get('amount'))
+        
+        if amount and amount <= max_bid:
+            return HttpResponse('Amount have to higher than the current price')
+        if form.is_valid():
+            bid = form.save(commit=False)
+            bid.auction = auction
+            bid.bidder = request.user
+            bid.save()
+            return redirect('detail', auction_id=auction_id)      
+    return render(request, "auctions/offer-bid.html", {
+        'form': form
+    })
+
 
 def add(request):
     form = AuctionForm()
@@ -134,14 +157,14 @@ def delete(request, auction_id):
 def detail(request, auction_id):
     auction = get_object_or_404(Auction, pk=auction_id)
     comments = Comment.objects.filter(auction=auction)
-    print(comments)
+    max_bid = Bid.objects.aggregate(Max('amount'))['amount__max']
     seller  = auction.seller
     user = request.user
     auctions = []
     watchlist = Watchlist.objects.all()    
     for item in watchlist:
         auctions.append(item.auction.id)
-    context = {'auction': auction, 'user': user, 'seller': seller, 'auctions_id': auctions, 'comments': comments}
+    context = {'auction': auction, 'user': user, 'seller': seller, 'auctions_id': auctions, 'comments': comments, 'current_price': max_bid}
     return render(request, "auctions/detail.html", context)
 
 

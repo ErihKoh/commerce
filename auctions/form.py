@@ -1,5 +1,5 @@
 from django import forms
-from .models import Auction, Comment
+from .models import Auction, Comment, Bid
 
 CATEGORIES = (
         ('no-category', 'no-category'),
@@ -10,7 +10,7 @@ CATEGORIES = (
 
 
 class AuctionForm(forms.ModelForm):
-    price = forms.DecimalField(initial=0.00)
+    price = forms.DecimalField(initial=0.0)
     class Meta:
         model = Auction
         fields = ['name', 'description', 'image_url', 'price', 'end_date', 'category']
@@ -40,3 +40,12 @@ class CommentForm(forms.ModelForm):
         fields = ('text',)
 
     text = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 3}))         
+
+
+class BidForm(forms.ModelForm):
+    amount = forms.DecimalField(initial=0.0)
+    class Meta:
+        model = Bid
+        fields = ('amount',)
+
+     
