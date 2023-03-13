@@ -21,7 +21,7 @@
     <a href="{% url 'offer-bid' auction.id %}" class="btn btn-info">Offer the price</a>
     
     <div class="mt-5">
-      <p> <span><b>Author: </b></span> Author</p>
+      <p> <span><b>Author: </b></span> {{bidder}}</p>
       <p> <span><b>Current price: </b></span> {{ current_price }}</p>
     </div>
   </div>

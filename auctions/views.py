@@ -158,13 +158,18 @@ def detail(request, auction_id):
     auction = get_object_or_404(Auction, pk=auction_id)
     comments = Comment.objects.filter(auction=auction)
     max_bid = Bid.objects.aggregate(Max('amount'))['amount__max']
+    bid = Bid.objects.filter(amount=max_bid)
     seller  = auction.seller
     user = request.user
     auctions = []
     watchlist = Watchlist.objects.all()    
     for item in watchlist:
         auctions.append(item.auction.id)
-    context = {'auction': auction, 'user': user, 'seller': seller, 'auctions_id': auctions, 'comments': comments, 'current_price': max_bid}
+    context = {'auction': auction, 'user': user, 
+               'seller': seller, 
+               'auctions_id': auctions, 
+               'comments': comments, 
+               'current_price': max_bid, 'bidder': 'author'}
     return render(request, "auctions/detail.html", context)
 
 
