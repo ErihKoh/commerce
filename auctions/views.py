@@ -85,7 +85,7 @@ def add_comment(request, auction_id):
             comment.auction = auction
             comment.author = request.user
             comment.save()
-            return redirect("/")
+            return redirect('detail', auction_id=auction_id)
     return render(request, "auctions/add_comment.html", {
         'form': form
     })
@@ -133,7 +133,7 @@ def delete(request, auction_id):
 
 def detail(request, auction_id):
     auction = get_object_or_404(Auction, pk=auction_id)
-    comments = Comment.objects.filter(author=request.user, auction=auction)
+    comments = Comment.objects.filter(auction=auction)
     print(comments)
     seller  = auction.seller
     user = request.user
