@@ -169,7 +169,7 @@ def detail(request, auction_id):
                'seller': seller, 
                'auctions_id': auctions, 
                'comments': comments, 
-               'current_price': max_bid, 'bidder': 'author'}
+               'current_price': max_bid or auction.price, 'bidder': 'author'}
     return render(request, "auctions/detail.html", context)
 
 
