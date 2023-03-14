@@ -17,14 +17,22 @@
     <p><b>Seller:</b> {{auction.seller}}</p>
   </div>
 </div>
-  <div>
-    <a href="{% url 'bid' auction.id %}" class="btn btn-info">Offer the price</a>
-    
-    <div class="mt-5">
-      <p> <span><b>Author: </b></span> {{bidder}}</p>
-      <p> <span><b>Current price: </b></span> {{ current_price }}</p>
-    </div>
+{% if winner %}
+<p><span><b>Winner: </b></span> <span>{{winner}}</span></p>
+<p><span><b>Current bid: </b></span> <span>{{ current_price }}</span></p>
+{%else%}
+<div>
+  {% if user != seller %}
+  <a href="{% url 'bid' auction.id %}" class="btn btn-info">Offer the price</a>
+  {% endif %}
+  
+  <div class="mt-5">
+    <p> <span><b>Author: </b></span> {{bidder}}</p>
+    <p> <span><b>Current price: </b></span> {{ current_price }}</p>
   </div>
+</div>
+{% endif %}
+  
     <div>
       <a href="{% url 'add_comment' auction.id %}" class="btn btn-info">Add a cometary</a>
       <div style="overflow: auto; max-width: 650px; height: 600px;">

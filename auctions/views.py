@@ -5,6 +5,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.db.models import Max
 from decimal import Decimal
+import datetime
 
 # Set your Cloudinary credentials
 # ==============================
@@ -31,10 +32,19 @@ config = cloudinary.config(secure=True)
 
 def index(request):
     auctions_list = Auction.objects.all()
+    auction = Auction.objects.filter(winner=request.user)
+    print(auction)
     return render(request, "auctions/index.html", {
         'auctions': auctions_list,
+        'winning_lots': auction
     })
 
+
+def winning_lots(request):
+    auction = Auction.objects.filter(winner=request.user)
+    return render(request, "auctions/winning-lot.html", {
+        'winning_lots': auction
+    })
 
 def my_list(request):
     auctions_list = Auction.objects.all()
@@ -95,9 +105,9 @@ def add_comment(request, auction_id):
 def bid(request, auction_id):
     auction = get_object_or_404(Auction, pk=auction_id)
     form = BidForm()
-        
+    
     if request.method == 'POST':
-        max_bid = Bid.objects.aggregate(Max('amount'))['amount__max']
+        max_bid = Bid.objects.filter(auction=auction).aggregate(Max('amount'))['amount__max']
         form = BidForm(request.POST)
         
         if form.is_valid():
@@ -110,7 +120,8 @@ def bid(request, auction_id):
             bid.auction = auction
             bid.bidder = request.user
             bid.save()
-            return redirect('detail', auction_id=auction_id)   
+            
+            return redirect('detail', auction_id=auction_id)  
     return render(request, "auctions/bid.html", {
         'form': form,
     })
@@ -157,21 +168,36 @@ def delete(request, auction_id):
 
 
 def detail(request, auction_id):
+    # Bid.objects.all().delete()
     auction = get_object_or_404(Auction, pk=auction_id)
+    current_date = datetime.datetime.now().date()
     comments = Comment.objects.filter(auction=auction)
-    max_bid = Bid.objects.aggregate(Max('amount'))['amount__max']
-    bid = Bid.objects.filter(amount=max_bid)
+    max_bid = Bid.objects.filter(auction=auction).aggregate(Max('amount'))['amount__max']
+    top_bidder = None
+    winner = None
+    if max_bid is not None:
+        top_bidder = Bid.objects.filter(auction=auction, amount=max_bid).first().bidder
+        print(f"Top Bidder: {top_bidder}, Max Bid: {max_bid}")
+    else:
+        print("There are no bids for the current auction.")
     seller  = auction.seller
     user = request.user
     auctions = []
     watchlist = Watchlist.objects.all()    
     for item in watchlist:
         auctions.append(item.auction.id)
+
+    if top_bidder and (auction.end_date == current_date or auction.is_available == False): 
+
+        winner = top_bidder
+        auction.winner = winner
+        auction.save()
+
     context = {'auction': auction, 'user': user, 
                'seller': seller, 
                'auctions_id': auctions, 
-               'comments': comments, 
-               'current_price': max_bid or auction.price, 'bidder': 'author'}
+               'comments': comments, 'winner': winner or None,
+               'current_price': max_bid or 'No bid', 'bidder': top_bidder or 'No bidder'}
     return render(request, "auctions/detail.html", context)
 
 
