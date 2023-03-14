@@ -1,0 +1,23 @@
+{% extends "auctions/layout.html" %} {% block body %}
+
+<h2 class="text-center my-2">Watching List</h2>
+
+<ul class="row mx-auto">
+  {% for auction in watchlist %} {% if user == auction.user %}
+  <li class="col-md-3 card-group">
+    <a href="{% url 'detail' auction.auction.id %}"
+      ><div class="card mb-4 shadow-sm card-custom">
+        <div class="img-container">
+          <img src="{{auction.auction.image_url}}" alt="img of product" />
+        </div>
+        <div class="card-body">
+          <h5 class="card-title">{{auction.auction.name}}</h5>
+          <p>Price: {{auction.auction.price}}</p>
+          <p>Seller: {{auction.auction.seller}}</p>
+        </div>
+      </div></a
+    >
+  </li>
+  {% endif %} {% endfor %}
+</ul>
+{% endblock %}

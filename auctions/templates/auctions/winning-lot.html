@@ -1,12 +1,8 @@
 {% extends "auctions/layout.html" %} {% block body %}
 
-<h2 class="text-center my-2">Active Listings</h2>
-{% if winning_lots %}
-<p>You have winning lots</p>
-<a href="{% url 'winning_lots' %}" class="btn btn-info mb-5">Winning lots</a>
-{% endif %}
+<h2 class="text-center my-2">Winning List</h2>
 <ul class="row mx-auto">
-  {% for auction in auctions %} {% if auction.is_available %}
+  {% for auction in winning_lots %}
 
   <li class="col-md-3 card-group">
     <a href="{% url 'detail' auction.id %}"
@@ -16,15 +12,13 @@
         </div>
         <div class="card-body">
           <h5 class="card-title">{{auction.name}}</h5>
-          <p>Price: {{auction.price}}</p>
+
           <p>Seller: {{auction.seller}}</p>
         </div>
       </div></a
     >
   </li>
-  {% endif %} 
-  {% empty %}
-  <li class="ml-4">The auctions list is empty.</li>
+
   {% endfor %}
 </ul>
 {% endblock %}
