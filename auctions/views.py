@@ -92,25 +92,27 @@ def add_comment(request, auction_id):
         'form': form
     })
 
-def offer_bid(request, auction_id):
+def bid(request, auction_id):
     auction = get_object_or_404(Auction, pk=auction_id)
-    
     form = BidForm()
+        
     if request.method == 'POST':
         max_bid = Bid.objects.aggregate(Max('amount'))['amount__max']
         form = BidForm(request.POST)
-        amount = Decimal(request.POST.get('amount'))
         
-        if amount and amount <= max_bid:
-            return HttpResponse('Amount have to higher than the current price')
         if form.is_valid():
+            amount = Decimal(request.POST.get('amount'))
+            if not max_bid:
+                max_bid = auction.price
+            if amount <= max_bid:
+              return HttpResponse('Amount have to higher than the current price')
             bid = form.save(commit=False)
             bid.auction = auction
             bid.bidder = request.user
             bid.save()
-            return redirect('detail', auction_id=auction_id)      
-    return render(request, "auctions/offer-bid.html", {
-        'form': form
+            return redirect('detail', auction_id=auction_id)   
+    return render(request, "auctions/bid.html", {
+        'form': form,
     })
 
 
