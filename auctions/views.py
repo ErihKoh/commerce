@@ -6,6 +6,7 @@ from django.urls import reverse
 from django.db.models import Max
 from decimal import Decimal
 import datetime
+import re
 
 # Set your Cloudinary credentials
 # ==============================
@@ -159,7 +160,9 @@ def edit(request, auction_id):
 
 def delete(request, auction_id):
     auction = get_object_or_404(Auction, pk=auction_id)
-
+    result = re.search(r"[^/]+$", auction.image_url)
+    img_id = result.group()[:-4:]
+    cloudinary.uploader.destroy(img_id, invalidate=True)
     auction.delete()
 
     print(f'{auction.name} has been deleted')
