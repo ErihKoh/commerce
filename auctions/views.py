@@ -22,22 +22,24 @@ import cloudinary
 import cloudinary.uploader
 import cloudinary.api
 
-# Import to format the JSON responses
-# ==============================
-import json
-
 from .models import User, Auction, Bid, Comment, Watchlist
 
 config = cloudinary.config(secure=True)
 
 
 def index(request):
+    global auction
     auctions_list = Auction.objects.all()
-    auction = Auction.objects.filter(winner=request.user)
-    print(auction)
+    if request.user.is_authenticated:
+        auction = Auction.objects.filter(winner=request.user)
+    else:
+         return render(request, "auctions/index.html", {
+        'auctions': auctions_list,
+    })   
+
     return render(request, "auctions/index.html", {
         'auctions': auctions_list,
-        'winning_lots': auction
+        'winning_lots': auction 
     })
 
 

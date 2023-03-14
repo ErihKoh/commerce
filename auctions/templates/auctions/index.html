@@ -1,5 +1,4 @@
 {% extends "auctions/layout.html" %} {% block body %}
-
 <h2 class="text-center my-2">Active Listings</h2>
 {% if winning_lots %}
 <p>You have winning lots</p>
@@ -22,8 +21,7 @@
       </div></a
     >
   </li>
-  {% endif %} 
-  {% empty %}
+  {% endif %} {% empty %}
   <li class="ml-4">The auctions list is empty.</li>
   {% endfor %}
 </ul>
